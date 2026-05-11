@@ -151,77 +151,176 @@ function FontLink() {
   );
 }
 
-/* ---------- habitat screenshots ----------
- * Map a habitat name to a screenshot URL from the game.
- * Pokopia art is © Nintendo / The Pokémon Company — hot-linked from
- * publicly hosted sources. Replace or self-host these URLs as needed.
- * When a habitat is missing or its image fails to load, the renderer
- * falls back to a clean gradient placeholder with the habitat name.
+/* ---------- habitat info ----------
+ * Each habitat has a 1-2 sentence description and an image filename.
+ * Image files live in /public/habitats/<slug>.jpg (any extension is
+ * fine — match the filename here). Drop screenshots in that folder
+ * and they appear automatically. Missing files fall back to a clean
+ * gradient + description with the habitat name.
+ *
+ * Pokopia art is © Nintendo / The Pokémon Company. Self-host
+ * screenshots in /public/habitats/ rather than hot-linking external
+ * sites, which routinely block hot-links and rotate URLs.
  */
-const HABITAT_IMAGES = {
-  // Example: 'Tall Grass': 'https://example.com/tall-grass.jpg',
+const BASE = import.meta.env.BASE_URL || '/';
+const habitatImg = (file) => `${BASE}habitats/${file}`;
+
+const HABITAT_INFO = {
+  'Tall Grass': {
+    image: habitatImg('tall-grass.jpg'),
+    desc: 'A patch of four grass tiles laid side by side. Pokémon rustle the blades — wade through to coax them into the open.',
+  },
+  'Tree-Shaded Tall Grass': {
+    image: habitatImg('tree-shaded-tall-grass.jpg'),
+    desc: 'Four patches of tall grass nestled at the base of a large tree. The cool shade draws forest-loving Pokémon like Scyther.',
+  },
+  'Boulder Tall Grass': {
+    image: habitatImg('boulder-tall-grass.jpg'),
+    desc: 'Four patches of tall grass arranged around a single large boulder. Rock-loving Pokémon scramble across the stone.',
+  },
+  'Waterside Tall Grass': {
+    image: habitatImg('waterside-tall-grass.jpg'),
+    desc: 'Tall grass planted along the water’s edge. The constant moisture keeps it vivid green and pulls in water-adjacent Pokémon.',
+  },
+  'Ocean Tall Grass': {
+    image: habitatImg('ocean-tall-grass.jpg'),
+    desc: 'Tall grass sprouting where the land meets the sea. Salt-tolerant Pokémon and tide-watchers gather along the shoreline.',
+  },
+  'Wildflower Patch': {
+    image: habitatImg('wildflower-patch.jpg'),
+    desc: 'A patch of four wildflower blooms gathered together. The bright petals draw pollinators and curious Pokémon alike.',
+  },
+  'Campfire Ring': {
+    image: habitatImg('campfire-ring.jpg'),
+    desc: 'Three campfires arranged in a cozy ring. Fire types and wanderers gather around the warm glow after sundown.',
+  },
+  'Mountain Cave': {
+    image: habitatImg('mountain-cave.jpg'),
+    desc: 'A dim cavern carved into the mountainside. Rock and Zubat-kin roost in the quiet, echoing depths.',
+  },
+  'Mountain Peak': {
+    image: habitatImg('mountain-peak.jpg'),
+    desc: 'A windswept summit far above the treeline. Hardy Pokémon train against the thin, cold air.',
+  },
+  'Veggie Plot': {
+    image: habitatImg('veggie-plot.jpg'),
+    desc: 'Tilled rows of soil studded with fresh sprouts. Pokémon graze and help tend the rows in turn.',
+  },
+  'Garden Habitat': {
+    image: habitatImg('garden-habitat.jpg'),
+    desc: 'A tidy garden of trimmed hedges and beds of flowers. Friendly Pokémon love the calm, well-kept space.',
+  },
+  'Sky Garden': {
+    image: habitatImg('sky-garden.jpg'),
+    desc: 'A floating garden built atop a Cloud Island. Rare Pokémon found nowhere else drift between its planters.',
+  },
+  'Construction Site': {
+    image: habitatImg('construction-site.jpg'),
+    desc: 'A bustling work site cluttered with scaffolding and beams. Strong, helpful Pokémon pitch in with the heavy lifting.',
+  },
+  'Waterside Dinghy': {
+    image: habitatImg('waterside-dinghy.jpg'),
+    desc: 'A small wooden boat moored at the shoreline. Aquatic Pokémon dart around the hull and through the ropes.',
+  },
+  'Tree-Shaded Pink Tall Grass': {
+    image: habitatImg('tree-shaded-pink-tall-grass.jpg'),
+    desc: 'A leafy tree shading patches of pink tall grass. The soft pink blades draw cheerful, sweet-natured Pokémon.',
+  },
+  'Hydrated Pink Tall Grass': {
+    image: habitatImg('hydrated-pink-tall-grass.jpg'),
+    desc: 'Pink tall grass kept lush by a steady source of water nearby. Pokémon cool off in the dewy blades.',
+  },
+  'Hidden Laboratory': {
+    image: habitatImg('hidden-laboratory.jpg'),
+    desc: 'A discreet research lab tucked away from view. Psychic, Steel, and tech-minded Pokémon gather around its humming equipment.',
+  },
+  'Secret Garden': {
+    image: habitatImg('secret-garden.jpg'),
+    desc: 'A hidden garden behind a flowered arch. The rarest, most timid Pokémon find sanctuary among the petals.',
+  },
+  'Pokémon Center': {
+    image: habitatImg('pokemon-center.jpg'),
+    desc: 'A red-roofed building with a healing counter glowing at all hours. Helpers and friendly Pokémon mingle inside.',
+  },
 };
 
 function HabitatScene({ habitat, accent }) {
-  const url = HABITAT_IMAGES[habitat];
+  const info = HABITAT_INFO[habitat];
   const [failed, setFailed] = useState(false);
-  const showImage = url && !failed;
+  const showImage = info && info.image && !failed;
 
   return (
-    <div style={{
-      position: 'relative',
-      borderRadius: 12,
-      overflow: 'hidden',
-      aspectRatio: '16 / 9',
-      background: showImage
-        ? '#0a0a0f'
-        : `linear-gradient(135deg, ${accent}22 0%, #0a0a0f 60%, ${accent}11 100%)`,
-      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06)',
-    }}>
-      {showImage ? (
-        <img
-          src={url}
-          alt={`${habitat} habitat screenshot`}
-          loading="lazy"
-          decoding="async"
-          draggable={false}
-          onError={() => setFailed(true)}
-          style={{
+    <div>
+      <div style={{
+        position: 'relative',
+        borderRadius: 12,
+        overflow: 'hidden',
+        aspectRatio: '16 / 9',
+        background: showImage
+          ? '#0a0a0f'
+          : `linear-gradient(135deg, ${accent}22 0%, #0a0a0f 60%, ${accent}11 100%)`,
+        boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06)',
+      }}>
+        {showImage ? (
+          <img
+            src={info.image}
+            alt={`${habitat} habitat screenshot`}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            onError={() => setFailed(true)}
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              WebkitTouchCallout: 'none',
+            }}
+          />
+        ) : (
+          <div style={{
             position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            WebkitTouchCallout: 'none',
-          }}
-        />
-      ) : (
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexDirection: 'column',
+            gap: 4,
+            color: 'rgba(255,255,255,0.45)',
+            fontSize: 11,
+            letterSpacing: 0.5,
+            padding: 16,
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 28 }}>🖼️</div>
+            <div>Screenshot coming soon</div>
+          </div>
+        )}
         <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'rgba(255,255,255,0.35)',
-          fontSize: 12,
+          position: 'absolute',
+          left: 10, bottom: 10,
+          fontSize: 11,
+          fontWeight: 600,
+          color: '#fff',
           letterSpacing: 0.5,
+          textShadow: '0 1px 4px rgba(0,0,0,0.7)',
+          background: 'rgba(0,0,0,0.4)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          padding: '4px 10px',
+          borderRadius: 999,
         }}>
-          No screenshot yet
+          {habitat}
+        </div>
+      </div>
+      {info && info.desc && (
+        <div style={{
+          marginTop: 10,
+          fontSize: 13,
+          lineHeight: 1.55,
+          color: 'rgba(255,255,255,0.72)',
+        }}>
+          {info.desc}
         </div>
       )}
-      <div style={{
-        position: 'absolute',
-        left: 10, bottom: 10,
-        fontSize: 11,
-        fontWeight: 600,
-        color: '#fff',
-        letterSpacing: 0.5,
-        textShadow: '0 1px 4px rgba(0,0,0,0.7)',
-        background: 'rgba(0,0,0,0.4)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-        padding: '4px 10px',
-        borderRadius: 999,
-      }}>
-        {habitat}
-      </div>
     </div>
   );
 }
