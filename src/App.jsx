@@ -27,22 +27,39 @@ const DEX = {
   Cacnea: 331, Sandshrew: 27, Trapinch: 328, Cubone: 104, Numel: 322,
   Hippopotas: 449, Sandile: 551, Diglett: 50, Drilbur: 529, Helioptile: 694,
   Maractus: 556, Darumaka: 554, Vulpix: 37, Growlithe: 58,
+  Charmander: 4, Charmeleon: 5, Phanpy: 231, Rolycoly: 837, Slugma: 218,
+  Litwick: 607, Scraggy: 559, Cutiefly: 742, Cyndaquil: 155, Torchic: 255,
+  Chimchar: 390, Tepig: 498,
   // Rocky Ridges
   Geodude: 74, Onix: 95, Aron: 304, Larvitar: 246, Roggenrola: 524,
   Machop: 66, Mankey: 56, Zubat: 41, Nosepass: 299, Rockruff: 744,
   Riolu: 447, Mienfoo: 619, Timburr: 532, Bonsly: 438,
+  Pawniard: 624, Lycanroc: 745, Tyrunt: 696, Carbink: 703, Cubchoo: 613,
+  Croagunk: 453, Klink: 599, Cufant: 878, Gible: 443, Salandit: 757,
+  Mawile: 303, Boldore: 525, Lillipup: 506, Stufful: 759, Spinda: 327,
   // Bleak Beach
   Magikarp: 129, Krabby: 98, Staryu: 120, Wingull: 278, Tentacool: 72,
   Horsea: 116, Wailmer: 320, Corsola: 222, Mudkip: 258, Psyduck: 54,
   Slowpoke: 79, Buizel: 418, Lapras: 131, Squirtle: 7,
+  Spheal: 363, Shellos: 422, Frillish: 592, Clamperl: 366, Tirtouga: 564,
+  Piplup: 393, Totodile: 158, Goldeen: 118, Remoraid: 223, Mantyke: 458,
+  Carvanha: 318, Oshawott: 501, Popplio: 728, Froakie: 656, Quaxly: 912,
+  Sobble: 816,
   // Sparkling Skylands
   Pidgey: 16, Togepi: 175, Cleffa: 173, Mareep: 179, Pichu: 172,
   Drifloon: 425, Swablu: 333, Starly: 396, Rookidee: 821, Hoppip: 187,
   Beldum: 374, Porygon: 137, Abra: 63, Ralts: 280,
+  Cottonee: 546, Petilil: 548, Igglybuff: 174, Jigglypuff: 39,
+  Magnemite: 81, Voltorb: 100, Elgyem: 605, Cosmog: 789, Sigilyph: 561,
+  Comfey: 764, Minccino: 572, Spritzee: 682,
   // Palette Town
   Bulbasaur: 1, Oddish: 43, Bellsprout: 69, Sunkern: 191, Caterpie: 10,
   Weedle: 13, Pikachu: 25, Eevee: 133, Chansey: 113, Snom: 872,
   Wooloo: 831, Skwovet: 819, Bidoof: 399, Munchlax: 446,
+  Chikorita: 152, Treecko: 252, Turtwig: 387, Snivy: 495, Chespin: 650,
+  Rowlet: 722, Grookey: 810, Sprigatito: 906, Hoothoot: 163, Sentret: 161,
+  Plusle: 311, Minun: 312, Yamper: 835, Lechonk: 915, Skitty: 300,
+  Buneary: 427, Audino: 531, Hatenna: 856, Morpeko: 877, Snorlax: 143,
 };
 
 /* Pokémon HOME 3D renders — closest free match to Pokopia's 3D-model style. */
@@ -54,88 +71,179 @@ const spriteUrl = (name) => {
   return id ? `${SPRITE_BASE}/${id}.png` : null;
 };
 
-/* ---------- pokémon data (70 entries across 5 regions) ---------- */
+/* ---------- pokémon data (145 entries across 5 regions) ----------
+ * Each entry: { id, name, type[], region, habitats[], specialty,
+ *               time, weather, desc }.
+ * A Pokémon can list multiple habitats — the card shows the first
+ * with a "+N" badge, and the detail panel renders every habitat as
+ * its own banner.
+ */
 
 const POKEMON = [
   // —— Withered Wasteland ——
-  { id: 1,  name: 'Cacnea',     type: ['Grass'],            region: 'Withered Wasteland', habitat: 'Wildflower Patch',     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A spiny cactus dweller that flourishes in dry soil. It helps coax wildflowers back to bloom across the wasteland.' },
-  { id: 2,  name: 'Sandshrew',  type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Tall Grass',           specialty: 'Bulldoze', time: 'Day',     weather: 'Sunny',  desc: 'Curls up in dry tall grass during the heat. It loosens packed earth so seeds can finally take root.' },
-  { id: 3,  name: 'Trapinch',   type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Boulder Tall Grass',   specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'Digs conical pits between sun-bleached boulders. It pulverizes rubble into workable sand.' },
-  { id: 4,  name: 'Cubone',     type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Wildflower Patch',     specialty: 'Gather',   time: 'Night',   weather: 'Any',    desc: 'A lonely wanderer of moonlit dunes. It collects bones and stones to mark new growing sites.' },
-  { id: 5,  name: 'Numel',      type: ['Fire', 'Ground'],   region: 'Withered Wasteland', habitat: 'Campfire Ring',        specialty: 'Burn',     time: 'Any',     weather: 'Sunny',  desc: 'Lounges by campfires with magma simmering inside its hump. It keeps cookfires lit through long desert nights.' },
-  { id: 6,  name: 'Hippopotas', type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Tall Grass',           specialty: 'Bulldoze', time: 'Day',     weather: 'Sunny',  desc: 'Trundles through dust bowls kicking up plumes of sand. It clears wide paths for caravans of helpers.' },
-  { id: 7,  name: 'Sandile',    type: ['Ground', 'Dark'],   region: 'Withered Wasteland', habitat: 'Tall Grass',           specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'Glides just beneath the sand with only its eyes visible. It tracks down lost tools buried by storms.' },
-  { id: 8,  name: 'Diglett',    type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Veggie Plot',          specialty: 'Bulldoze', time: 'Any',     weather: 'Any',    desc: 'Pops up wherever the soil is loose enough to till. It aerates new veggie plots overnight.' },
-  { id: 9,  name: 'Drilbur',    type: ['Ground'],           region: 'Withered Wasteland', habitat: 'Construction Site',    specialty: 'Build',    time: 'Day',     weather: 'Any',    desc: 'Spins through hardpan like a living drill. It opens foundations for new desert outposts.' },
-  { id: 10, name: 'Helioptile', type: ['Electric', 'Normal'], region: 'Withered Wasteland', habitat: 'Wildflower Patch',   specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Unfurls solar frills to drink in the harsh sun. It powers tiny irrigation pumps for fragile blooms.' },
-  { id: 11, name: 'Maractus',   type: ['Grass'],            region: 'Withered Wasteland', habitat: 'Wildflower Patch',     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Rattles its spines in a rhythm that wakes seeds. It dances dawn-to-dusk to encourage flowers.' },
-  { id: 12, name: 'Darumaka',   type: ['Fire'],             region: 'Withered Wasteland', habitat: 'Campfire Ring',        specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Bounces around the embers warming chilly mornings. It ignites kindling with a single hiccup of flame.' },
-  { id: 13, name: 'Vulpix',     type: ['Fire'],             region: 'Withered Wasteland', habitat: 'Tall Grass',           specialty: 'Burn',     time: 'Evening', weather: 'Sunny',  desc: 'Slips through brittle grass with tails flickering. It carefully scorches deadwood to make space for fresh growth.' },
-  { id: 14, name: 'Growlithe',  type: ['Fire'],             region: 'Withered Wasteland', habitat: 'Campfire Ring',        specialty: 'Burn',     time: 'Any',     weather: 'Any',    desc: 'Stands watch beside the fire pit, ears pricked. It guards travelers and helps relight stoves on demand.' },
+  { id: 1,  name: 'Cacnea',     type: ['Grass'],            region: 'Withered Wasteland', habitats: ['Wildflower Patch'],     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A spiny cactus dweller that flourishes in dry soil. It helps coax wildflowers back to bloom across the wasteland.' },
+  { id: 2,  name: 'Sandshrew',  type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Tall Grass'],           specialty: 'Bulldoze', time: 'Day',     weather: 'Sunny',  desc: 'Curls up in dry tall grass during the heat. It loosens packed earth so seeds can finally take root.' },
+  { id: 3,  name: 'Trapinch',   type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Boulder Tall Grass'],   specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'Digs conical pits between sun-bleached boulders. It pulverizes rubble into workable sand.' },
+  { id: 4,  name: 'Cubone',     type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Wildflower Patch'],     specialty: 'Gather',   time: 'Night',   weather: 'Any',    desc: 'A lonely wanderer of moonlit dunes. It collects bones and stones to mark new growing sites.' },
+  { id: 5,  name: 'Numel',      type: ['Fire', 'Ground'],   region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Any',     weather: 'Sunny',  desc: 'Lounges by campfires with magma simmering inside its hump. It keeps cookfires lit through long desert nights.' },
+  { id: 6,  name: 'Hippopotas', type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Tall Grass'],           specialty: 'Bulldoze', time: 'Day',     weather: 'Sunny',  desc: 'Trundles through dust bowls kicking up plumes of sand. It clears wide paths for caravans of helpers.' },
+  { id: 7,  name: 'Sandile',    type: ['Ground', 'Dark'],   region: 'Withered Wasteland', habitats: ['Tall Grass'],           specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'Glides just beneath the sand with only its eyes visible. It tracks down lost tools buried by storms.' },
+  { id: 8,  name: 'Diglett',    type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Veggie Plot'],          specialty: 'Bulldoze', time: 'Any',     weather: 'Any',    desc: 'Pops up wherever the soil is loose enough to till. It aerates new veggie plots overnight.' },
+  { id: 9,  name: 'Drilbur',    type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Construction Site'],    specialty: 'Build',    time: 'Day',     weather: 'Any',    desc: 'Spins through hardpan like a living drill. It opens foundations for new desert outposts.' },
+  { id: 10, name: 'Helioptile', type: ['Electric', 'Normal'], region: 'Withered Wasteland', habitats: ['Wildflower Patch'],   specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Unfurls solar frills to drink in the harsh sun. It powers tiny irrigation pumps for fragile blooms.' },
+  { id: 11, name: 'Maractus',   type: ['Grass'],            region: 'Withered Wasteland', habitats: ['Wildflower Patch'],     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Rattles its spines in a rhythm that wakes seeds. It dances dawn-to-dusk to encourage flowers.' },
+  { id: 12, name: 'Darumaka',   type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Bounces around the embers warming chilly mornings. It ignites kindling with a single hiccup of flame.' },
+  { id: 13, name: 'Vulpix',     type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Tall Grass'],           specialty: 'Burn',     time: 'Evening', weather: 'Sunny',  desc: 'Slips through brittle grass with tails flickering. It carefully scorches deadwood to make space for fresh growth.' },
+  { id: 14, name: 'Growlithe',  type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Any',     weather: 'Any',    desc: 'Stands watch beside the fire pit, ears pricked. It guards travelers and helps relight stoves on demand.' },
 
   // —— Rocky Ridges ——
-  { id: 15, name: 'Geodude',    type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitat: 'Mountain Cave',        specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'Sleeps wedged into cave walls until the morning bell. It crushes ore and rubble for tomorrow’s builders.' },
-  { id: 16, name: 'Onix',       type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitat: 'Mountain Cave',        specialty: 'Bulldoze', time: 'Any',     weather: 'Any',    desc: 'Tunnels long, twisting passages through the ridge. Its corridors become highways for hauling materials.' },
-  { id: 17, name: 'Aron',       type: ['Steel', 'Rock'],    region: 'Rocky Ridges',       habitat: 'Mountain Cave',        specialty: 'Recycle',  time: 'Day',     weather: 'Cloudy', desc: 'Munches abandoned scrap iron deep in the cave. It refines it into nuggets for the smiths upstairs.' },
-  { id: 18, name: 'Larvitar',   type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitat: 'Boulder Tall Grass',   specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'Burrows between boulders nibbling stone for nutrients. Its leavings make excellent gravel.' },
-  { id: 19, name: 'Roggenrola', type: ['Rock'],             region: 'Rocky Ridges',       habitat: 'Mountain Cave',        specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'A walking core of compressed energy in the dark. It powers crystal lamps and clears stone debris.' },
-  { id: 20, name: 'Machop',     type: ['Fighting'],         region: 'Rocky Ridges',       habitat: 'Mountain Peak',        specialty: 'Build',    time: 'Day',     weather: 'Sunny',  desc: 'Hauls slabs up the ridge for sheer training. It anchors framework beams nobody else can lift.' },
-  { id: 21, name: 'Mankey',     type: ['Fighting'],         region: 'Rocky Ridges',       habitat: 'Tree-Shaded Tall Grass', specialty: 'Chop',   time: 'Day',     weather: 'Cloudy', desc: 'Swings from shaded branches in noisy troops. It clears overgrown switchbacks with rapid kicks.' },
-  { id: 22, name: 'Zubat',      type: ['Poison', 'Flying'], region: 'Rocky Ridges',       habitat: 'Mountain Cave',        specialty: 'Search',   time: 'Night',   weather: 'Any',    desc: 'Flits through pitch-dark passages by echo. It maps unexplored caverns for the survey team.' },
-  { id: 23, name: 'Nosepass',   type: ['Rock'],             region: 'Rocky Ridges',       habitat: 'Mountain Peak',        specialty: 'Search',   time: 'Day',     weather: 'Any',    desc: 'Points its magnetic nose unerringly north. It orients pathfinders lost in cloud-wreathed peaks.' },
-  { id: 24, name: 'Rockruff',   type: ['Rock'],             region: 'Rocky Ridges',       habitat: 'Boulder Tall Grass',   specialty: 'Chop',    time: 'Day',     weather: 'Sunny',  desc: 'Bounds between boulders barking at passing helpers. It gnaws fallen branches into kindling.' },
-  { id: 25, name: 'Riolu',      type: ['Fighting'],         region: 'Rocky Ridges',       habitat: 'Mountain Peak',        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Reads moods through its aura. It cheers builders into their second wind on the steep peaks.' },
-  { id: 26, name: 'Mienfoo',    type: ['Fighting'],         region: 'Rocky Ridges',       habitat: 'Tree-Shaded Tall Grass', specialty: 'Chop',   time: 'Day',     weather: 'Any',    desc: 'Trains beneath cool, shaded leaves. Each chop of its paw splits a log clean in two.' },
-  { id: 27, name: 'Timburr',    type: ['Fighting'],         region: 'Rocky Ridges',       habitat: 'Construction Site',    specialty: 'Build',    time: 'Day',     weather: 'Any',    desc: 'Hauls a square beam everywhere it goes. It frames every new bridge along the ridge road.' },
-  { id: 28, name: 'Bonsly',     type: ['Rock'],             region: 'Rocky Ridges',       habitat: 'Boulder Tall Grass',   specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'Sheds salty droplets that nourish dry moss. It quietly gathers pebbles to mark safe footing.' },
+  { id: 15, name: 'Geodude',    type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitats: ['Mountain Cave', 'Boulder Tall Grass'], specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'Sleeps wedged into cave walls until the morning bell. It crushes ore and rubble for tomorrow’s builders.' },
+  { id: 16, name: 'Onix',       type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Bulldoze', time: 'Any',     weather: 'Any',    desc: 'Tunnels long, twisting passages through the ridge. Its corridors become highways for hauling materials.' },
+  { id: 17, name: 'Aron',       type: ['Steel', 'Rock'],    region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Recycle',  time: 'Day',     weather: 'Cloudy', desc: 'Munches abandoned scrap iron deep in the cave. It refines it into nuggets for the smiths upstairs.' },
+  { id: 18, name: 'Larvitar',   type: ['Rock', 'Ground'],   region: 'Rocky Ridges',       habitats: ['Boulder Tall Grass'],   specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'Burrows between boulders nibbling stone for nutrients. Its leavings make excellent gravel.' },
+  { id: 19, name: 'Roggenrola', type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'A walking core of compressed energy in the dark. It powers crystal lamps and clears stone debris.' },
+  { id: 20, name: 'Machop',     type: ['Fighting'],         region: 'Rocky Ridges',       habitats: ['Mountain Peak'],        specialty: 'Build',    time: 'Day',     weather: 'Sunny',  desc: 'Hauls slabs up the ridge for sheer training. It anchors framework beams nobody else can lift.' },
+  { id: 21, name: 'Mankey',     type: ['Fighting'],         region: 'Rocky Ridges',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Chop',   time: 'Day',     weather: 'Cloudy', desc: 'Swings from shaded branches in noisy troops. It clears overgrown switchbacks with rapid kicks.' },
+  { id: 22, name: 'Zubat',      type: ['Poison', 'Flying'], region: 'Rocky Ridges',       habitats: ['Mountain Cave', 'Hidden Laboratory'], specialty: 'Search',   time: 'Night',   weather: 'Any',    desc: 'Flits through pitch-dark passages by echo. It maps unexplored caverns for the survey team.' },
+  { id: 23, name: 'Nosepass',   type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Mountain Peak'],        specialty: 'Search',   time: 'Day',     weather: 'Any',    desc: 'Points its magnetic nose unerringly north. It orients pathfinders lost in cloud-wreathed peaks.' },
+  { id: 24, name: 'Rockruff',   type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Boulder Tall Grass'],   specialty: 'Chop',    time: 'Day',     weather: 'Sunny',  desc: 'Bounds between boulders barking at passing helpers. It gnaws fallen branches into kindling.' },
+  { id: 25, name: 'Riolu',      type: ['Fighting'],         region: 'Rocky Ridges',       habitats: ['Mountain Peak'],        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Reads moods through its aura. It cheers builders into their second wind on the steep peaks.' },
+  { id: 26, name: 'Mienfoo',    type: ['Fighting'],         region: 'Rocky Ridges',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Chop',   time: 'Day',     weather: 'Any',    desc: 'Trains beneath cool, shaded leaves. Each chop of its paw splits a log clean in two.' },
+  { id: 27, name: 'Timburr',    type: ['Fighting'],         region: 'Rocky Ridges',       habitats: ['Construction Site'],    specialty: 'Build',    time: 'Day',     weather: 'Any',    desc: 'Hauls a square beam everywhere it goes. It frames every new bridge along the ridge road.' },
+  { id: 28, name: 'Bonsly',     type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Boulder Tall Grass'],   specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'Sheds salty droplets that nourish dry moss. It quietly gathers pebbles to mark safe footing.' },
 
   // —— Bleak Beach ——
-  { id: 29, name: 'Magikarp',   type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Tall Grass', specialty: 'Water',    time: 'Any',     weather: 'Any',    desc: 'Splashes in shallow reeds with hopeful resolve. Its splashes water nearby seedlings just enough.' },
-  { id: 30, name: 'Krabby',     type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Dinghy',     specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'Scuttles among the moored dinghies snipping kelp. It uncovers shells and lost trinkets along the planks.' },
-  { id: 31, name: 'Staryu',     type: ['Water'],            region: 'Bleak Beach',        habitat: 'Ocean Tall Grass',     specialty: 'Generate', time: 'Night',   weather: 'Any',    desc: 'Pulses softly between swaying ocean grasses. It powers buoy lamps that guide night fishers home.' },
-  { id: 32, name: 'Wingull',    type: ['Water', 'Flying'],  region: 'Bleak Beach',        habitat: 'Waterside Dinghy',     specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'Wheels above the dock chasing breezes. It ferries lightweight parcels from boat to boat.' },
-  { id: 33, name: 'Tentacool',  type: ['Water', 'Poison'],  region: 'Bleak Beach',        habitat: 'Ocean Tall Grass',     specialty: 'Litter',   time: 'Any',     weather: 'Cloudy', desc: 'Drifts with the current, tentacles trailing. It collects floating plastic and surrenders it to recyclers.' },
-  { id: 34, name: 'Horsea',     type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Dinghy',     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Anchors itself to mossy rope under a dinghy. It mists nearby reeds to keep them sea-green.' },
-  { id: 35, name: 'Wailmer',    type: ['Water'],            region: 'Bleak Beach',        habitat: 'Ocean Tall Grass',     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Spouts plumes high above the kelp beds. It rains a fine mist that revives parched tidepools.' },
-  { id: 36, name: 'Corsola',    type: ['Water', 'Rock'],    region: 'Bleak Beach',        habitat: 'Waterside Tall Grass', specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Grows pink branches from its sturdy shell. It seeds new reefs where the tide pools are healing.' },
-  { id: 37, name: 'Mudkip',     type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Tall Grass', specialty: 'Water',    time: 'Any',     weather: 'Rain',   desc: 'Wades in tidewater grass sensing the slightest current. It waters whole flowerbeds before breakfast.' },
-  { id: 38, name: 'Psyduck',    type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Tall Grass', specialty: 'Teleport', time: 'Day',     weather: 'Cloudy', desc: 'Stares dazedly at the waves until a headache strikes. When it does, helpful objects appear out of nowhere.' },
-  { id: 39, name: 'Slowpoke',   type: ['Water', 'Psychic'], region: 'Bleak Beach',        habitat: 'Waterside Tall Grass', specialty: 'Search',   time: 'Any',     weather: 'Any',    desc: 'Dangles its tail in the shallows for hours. It eventually fishes up exactly the item you needed.' },
-  { id: 40, name: 'Buizel',     type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Dinghy',     specialty: 'Water',    time: 'Day',     weather: 'Sunny',  desc: 'Inflates its flotation collar to tow the dinghies. It also turns waterwheels for the seaside mill.' },
-  { id: 41, name: 'Lapras',     type: ['Water', 'Ice'],     region: 'Bleak Beach',        habitat: 'Ocean Tall Grass',     specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'A gentle ferry across the cold ocean grass. It carries crews to the offshore construction site.' },
-  { id: 42, name: 'Squirtle',   type: ['Water'],            region: 'Bleak Beach',        habitat: 'Waterside Dinghy',     specialty: 'Water',    time: 'Any',     weather: 'Sunny',  desc: 'Climbs onto a sun-warmed dinghy to nap. It blasts water on command to scrub salt from the deck.' },
+  { id: 29, name: 'Magikarp',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass', 'Ocean Tall Grass'], specialty: 'Water',    time: 'Any',     weather: 'Any',    desc: 'Splashes in shallow reeds with hopeful resolve. Its splashes water nearby seedlings just enough.' },
+  { id: 30, name: 'Krabby',     type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'Scuttles among the moored dinghies snipping kelp. It uncovers shells and lost trinkets along the planks.' },
+  { id: 31, name: 'Staryu',     type: ['Water'],            region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Generate', time: 'Night',   weather: 'Any',    desc: 'Pulses softly between swaying ocean grasses. It powers buoy lamps that guide night fishers home.' },
+  { id: 32, name: 'Wingull',    type: ['Water', 'Flying'],  region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'Wheels above the dock chasing breezes. It ferries lightweight parcels from boat to boat.' },
+  { id: 33, name: 'Tentacool',  type: ['Water', 'Poison'],  region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Litter',   time: 'Any',     weather: 'Cloudy', desc: 'Drifts with the current, tentacles trailing. It collects floating plastic and surrenders it to recyclers.' },
+  { id: 34, name: 'Horsea',     type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Anchors itself to mossy rope under a dinghy. It mists nearby reeds to keep them sea-green.' },
+  { id: 35, name: 'Wailmer',    type: ['Water'],            region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Spouts plumes high above the kelp beds. It rains a fine mist that revives parched tidepools.' },
+  { id: 36, name: 'Corsola',    type: ['Water', 'Rock'],    region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Grows pink branches from its sturdy shell. It seeds new reefs where the tide pools are healing.' },
+  { id: 37, name: 'Mudkip',     type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Any',     weather: 'Rain',   desc: 'Wades in tidewater grass sensing the slightest current. It waters whole flowerbeds before breakfast.' },
+  { id: 38, name: 'Psyduck',    type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Teleport', time: 'Day',     weather: 'Cloudy', desc: 'Stares dazedly at the waves until a headache strikes. When it does, helpful objects appear out of nowhere.' },
+  { id: 39, name: 'Slowpoke',   type: ['Water', 'Psychic'], region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Search',   time: 'Any',     weather: 'Any',    desc: 'Dangles its tail in the shallows for hours. It eventually fishes up exactly the item you needed.' },
+  { id: 40, name: 'Buizel',     type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Water',    time: 'Day',     weather: 'Sunny',  desc: 'Inflates its flotation collar to tow the dinghies. It also turns waterwheels for the seaside mill.' },
+  { id: 41, name: 'Lapras',     type: ['Water', 'Ice'],     region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'A gentle ferry across the cold ocean grass. It carries crews to the offshore construction site.' },
+  { id: 42, name: 'Squirtle',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy', 'Waterside Tall Grass'], specialty: 'Water',    time: 'Any',     weather: 'Sunny',  desc: 'Climbs onto a sun-warmed dinghy to nap. It blasts water on command to scrub salt from the deck.' },
 
   // —— Sparkling Skylands ——
-  { id: 43, name: 'Pidgey',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'Coasts the updrafts circling the floating gardens. It scouts new island patches for planters.' },
-  { id: 44, name: 'Togepi',     type: ['Fairy'],            region: 'Sparkling Skylands', habitat: 'Secret Garden',        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'A pocketful of luck waddles among the petals. Its presence lifts spirits across the whole island.' },
-  { id: 45, name: 'Cleffa',     type: ['Fairy'],            region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Hype',     time: 'Night',   weather: 'Any',    desc: 'Bounces in starlit circles between drifting clouds. It choreographs late-night dances for the helpers.' },
-  { id: 46, name: 'Mareep',     type: ['Electric'],         region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Grazes the cloud-meadows storing static in its fleece. A pat from a helper charges a whole lantern.' },
-  { id: 47, name: 'Pichu',      type: ['Electric'],         region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Sparks adorably whenever it tries to talk. It runs tiny lights along the garden trellises.' },
-  { id: 48, name: 'Drifloon',   type: ['Ghost', 'Flying'],  region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Fly',      time: 'Evening', weather: 'Cloudy', desc: 'Tethers itself to railings until needed. It floats fragile pots between island terraces.' },
-  { id: 49, name: 'Swablu',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'Trails cottony wings as it loops the sky. It dusts pollen across distant flowerbeds.' },
-  { id: 50, name: 'Starly',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'Lives in chattering flocks above the meadows. It signals weather changes to the gardeners below.' },
-  { id: 51, name: 'Rookidee',   type: ['Flying'],           region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'A brave little courier hopping cloud to cloud. It will challenge anything that ruffles its garden.' },
-  { id: 52, name: 'Hoppip',     type: ['Grass', 'Flying'],  region: 'Sparkling Skylands', habitat: 'Sky Garden',           specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Drifts wherever the breeze takes it. It spreads seeds across every floating planter on the way.' },
-  { id: 53, name: 'Beldum',     type: ['Steel', 'Psychic'], region: 'Sparkling Skylands', habitat: 'Hidden Laboratory',    specialty: 'Build',    time: 'Any',     weather: 'Any',    desc: 'Hovers patiently among gleaming benches. It assembles delicate frameworks with magnetic precision.' },
-  { id: 54, name: 'Porygon',    type: ['Normal'],           region: 'Sparkling Skylands', habitat: 'Hidden Laboratory',    specialty: 'Generate', time: 'Any',     weather: 'Any',    desc: 'A polygonal helper that lives in the lab’s mainframe. It compiles blueprints for the rest of the team.' },
-  { id: 55, name: 'Abra',       type: ['Psychic'],          region: 'Sparkling Skylands', habitat: 'Hidden Laboratory',    specialty: 'Teleport', time: 'Any',     weather: 'Any',    desc: 'Sleeps almost all day inside the lab. When awake, it teleports tools wherever they’re needed instantly.' },
-  { id: 56, name: 'Ralts',      type: ['Psychic', 'Fairy'], region: 'Sparkling Skylands', habitat: 'Secret Garden',        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Senses the emotions of every island visitor. It guides anxious newcomers gently into the secret garden.' },
+  { id: 43, name: 'Pidgey',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitats: ['Sky Garden', 'Tree-Shaded Tall Grass'], specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'Coasts the updrafts circling the floating gardens. It scouts new island patches for planters.' },
+  { id: 44, name: 'Togepi',     type: ['Fairy'],            region: 'Sparkling Skylands', habitats: ['Secret Garden'],        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'A pocketful of luck waddles among the petals. Its presence lifts spirits across the whole island.' },
+  { id: 45, name: 'Cleffa',     type: ['Fairy'],            region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Hype',     time: 'Night',   weather: 'Any',    desc: 'Bounces in starlit circles between drifting clouds. It choreographs late-night dances for the helpers.' },
+  { id: 46, name: 'Mareep',     type: ['Electric'],         region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Grazes the cloud-meadows storing static in its fleece. A pat from a helper charges a whole lantern.' },
+  { id: 47, name: 'Pichu',      type: ['Electric'],         region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'Sparks adorably whenever it tries to talk. It runs tiny lights along the garden trellises.' },
+  { id: 48, name: 'Drifloon',   type: ['Ghost', 'Flying'],  region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Fly',      time: 'Evening', weather: 'Cloudy', desc: 'Tethers itself to railings until needed. It floats fragile pots between island terraces.' },
+  { id: 49, name: 'Swablu',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'Trails cottony wings as it loops the sky. It dusts pollen across distant flowerbeds.' },
+  { id: 50, name: 'Starly',     type: ['Normal', 'Flying'], region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Fly',      time: 'Day',     weather: 'Any',    desc: 'Lives in chattering flocks above the meadows. It signals weather changes to the gardeners below.' },
+  { id: 51, name: 'Rookidee',   type: ['Flying'],           region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'A brave little courier hopping cloud to cloud. It will challenge anything that ruffles its garden.' },
+  { id: 52, name: 'Hoppip',     type: ['Grass', 'Flying'],  region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Drifts wherever the breeze takes it. It spreads seeds across every floating planter on the way.' },
+  { id: 53, name: 'Beldum',     type: ['Steel', 'Psychic'], region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Build',    time: 'Any',     weather: 'Any',    desc: 'Hovers patiently among gleaming benches. It assembles delicate frameworks with magnetic precision.' },
+  { id: 54, name: 'Porygon',    type: ['Normal'],           region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Generate', time: 'Any',     weather: 'Any',    desc: 'A polygonal helper that lives in the lab’s mainframe. It compiles blueprints for the rest of the team.' },
+  { id: 55, name: 'Abra',       type: ['Psychic'],          region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Teleport', time: 'Any',     weather: 'Any',    desc: 'Sleeps almost all day inside the lab. When awake, it teleports tools wherever they’re needed instantly.' },
+  { id: 56, name: 'Ralts',      type: ['Psychic', 'Fairy'], region: 'Sparkling Skylands', habitats: ['Secret Garden'],        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Senses the emotions of every island visitor. It guides anxious newcomers gently into the secret garden.' },
 
   // —— Palette Town ——
-  { id: 57, name: 'Bulbasaur',  type: ['Grass', 'Poison'],  region: 'Palette Town',       habitat: 'Garden Habitat',       specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Bathes its bulb in the morning sun. It seeds whole flowerbeds in a single afternoon.' },
-  { id: 58, name: 'Oddish',     type: ['Grass', 'Poison'],  region: 'Palette Town',       habitat: 'Garden Habitat',       specialty: 'Grow',     time: 'Night',   weather: 'Rain',   desc: 'Buries itself by day and dances by night. Wherever it dances, new sprouts appear by dawn.' },
-  { id: 59, name: 'Bellsprout', type: ['Grass', 'Poison'],  region: 'Palette Town',       habitat: 'Veggie Plot',          specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Sways like a stalk in the breeze among the rows. It speeds along the ripening of every veggie.' },
-  { id: 60, name: 'Sunkern',    type: ['Grass'],            region: 'Palette Town',       habitat: 'Wildflower Patch',     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A tiny seed that hardly moves all day. Beneath it, the soil quietly grows richer.' },
-  { id: 61, name: 'Caterpie',   type: ['Bug'],              region: 'Palette Town',       habitat: 'Tree-Shaded Tall Grass', specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'Inches along leafy stems collecting tender shoots. It bundles them neatly for the gardeners.' },
-  { id: 62, name: 'Weedle',     type: ['Bug', 'Poison'],    region: 'Palette Town',       habitat: 'Tree-Shaded Tall Grass', specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'A careful forager with a stinger to match. It clips ripe berries without bruising a one.' },
-  { id: 63, name: 'Pikachu',    type: ['Electric'],         region: 'Palette Town',       habitat: 'Tree-Shaded Pink Tall Grass', specialty: 'Generate', time: 'Day', weather: 'Sunny',  desc: 'Loves the pink-tinged grass best of all. A tail-wag from this one lights the whole town square.' },
-  { id: 64, name: 'Eevee',      type: ['Normal'],           region: 'Palette Town',       habitat: 'Pokémon Center',       specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Greets every visitor at the Pokémon Center door. Its tail-wag is rumored to cure homesickness.' },
-  { id: 65, name: 'Chansey',    type: ['Normal'],           region: 'Palette Town',       habitat: 'Pokémon Center',       specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Doles out lucky eggs to weary helpers. Its smile alone seems to mend a rough day.' },
-  { id: 66, name: 'Snom',       type: ['Ice', 'Bug'],       region: 'Palette Town',       habitat: 'Hydrated Pink Tall Grass', specialty: 'Water', time: 'Night',   weather: 'Rain',   desc: 'Curls in cool dew between blades of pink grass. It drips meltwater that nurtures rare blooms.' },
-  { id: 67, name: 'Wooloo',     type: ['Normal'],           region: 'Palette Town',       habitat: 'Garden Habitat',       specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'Rolls through the garden trimming overgrown grass. Its wool drops become soft mulch for new beds.' },
-  { id: 68, name: 'Skwovet',    type: ['Normal'],           region: 'Palette Town',       habitat: 'Tree-Shaded Tall Grass', specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'Cheeks bulging with stashed berries year-round. It tops up the town larder without being asked.' },
-  { id: 69, name: 'Bidoof',     type: ['Normal'],           region: 'Palette Town',       habitat: 'Veggie Plot',          specialty: 'Chop',     time: 'Day',     weather: 'Any',    desc: 'A cheerful little builder with strong teeth. It gnaws timber to size for every fence post in town.' },
-  { id: 70, name: 'Munchlax',   type: ['Normal'],           region: 'Palette Town',       habitat: 'Tree-Shaded Pink Tall Grass', specialty: 'Recycle', time: 'Any', weather: 'Any',   desc: 'Will eat almost any leftover offered. It composts the rest into rich soil for the pink-grass meadows.' },
+  { id: 57, name: 'Bulbasaur',  type: ['Grass', 'Poison'],  region: 'Palette Town',       habitats: ['Garden Habitat', 'Tree-Shaded Tall Grass'], specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Bathes its bulb in the morning sun. It seeds whole flowerbeds in a single afternoon.' },
+  { id: 58, name: 'Oddish',     type: ['Grass', 'Poison'],  region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Grow',     time: 'Night',   weather: 'Rain',   desc: 'Buries itself by day and dances by night. Wherever it dances, new sprouts appear by dawn.' },
+  { id: 59, name: 'Bellsprout', type: ['Grass', 'Poison'],  region: 'Palette Town',       habitats: ['Veggie Plot'],          specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Sways like a stalk in the breeze among the rows. It speeds along the ripening of every veggie.' },
+  { id: 60, name: 'Sunkern',    type: ['Grass'],            region: 'Palette Town',       habitats: ['Wildflower Patch'],     specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A tiny seed that hardly moves all day. Beneath it, the soil quietly grows richer.' },
+  { id: 61, name: 'Caterpie',   type: ['Bug'],              region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'Inches along leafy stems collecting tender shoots. It bundles them neatly for the gardeners.' },
+  { id: 62, name: 'Weedle',     type: ['Bug', 'Poison'],    region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'A careful forager with a stinger to match. It clips ripe berries without bruising a one.' },
+  { id: 63, name: 'Pikachu',    type: ['Electric'],         region: 'Palette Town',       habitats: ['Tree-Shaded Pink Tall Grass', 'Wildflower Patch'], specialty: 'Generate', time: 'Day', weather: 'Sunny',  desc: 'Loves the pink-tinged grass best of all. A tail-wag from this one lights the whole town square.' },
+  { id: 64, name: 'Eevee',      type: ['Normal'],           region: 'Palette Town',       habitats: ['Pokémon Center', 'Garden Habitat'], specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Greets every visitor at the Pokémon Center door. Its tail-wag is rumored to cure homesickness.' },
+  { id: 65, name: 'Chansey',    type: ['Normal'],           region: 'Palette Town',       habitats: ['Pokémon Center'],       specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Doles out lucky eggs to weary helpers. Its smile alone seems to mend a rough day.' },
+  { id: 66, name: 'Snom',       type: ['Ice', 'Bug'],       region: 'Palette Town',       habitats: ['Hydrated Pink Tall Grass', 'Secret Garden'], specialty: 'Water', time: 'Night',   weather: 'Rain',   desc: 'Curls in cool dew between blades of pink grass. It drips meltwater that nurtures rare blooms.' },
+  { id: 67, name: 'Wooloo',     type: ['Normal'],           region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'Rolls through the garden trimming overgrown grass. Its wool drops become soft mulch for new beds.' },
+  { id: 68, name: 'Skwovet',    type: ['Normal'],           region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Gather',  time: 'Day',     weather: 'Any',    desc: 'Cheeks bulging with stashed berries year-round. It tops up the town larder without being asked.' },
+  { id: 69, name: 'Bidoof',     type: ['Normal'],           region: 'Palette Town',       habitats: ['Veggie Plot'],          specialty: 'Chop',     time: 'Day',     weather: 'Any',    desc: 'A cheerful little builder with strong teeth. It gnaws timber to size for every fence post in town.' },
+  { id: 70, name: 'Munchlax',   type: ['Normal'],           region: 'Palette Town',       habitats: ['Tree-Shaded Pink Tall Grass'], specialty: 'Recycle', time: 'Any', weather: 'Any',   desc: 'Will eat almost any leftover offered. It composts the rest into rich soil for the pink-grass meadows.' },
+
+  // —— Withered Wasteland (added) ——
+  { id: 71, name: 'Charmander', type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring', 'Wildflower Patch'], specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Curls beside the fire warming its tail-flame. It lights signal lanterns along the dune trails after dusk.' },
+  { id: 72, name: 'Charmeleon', type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring', 'Tall Grass'], specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Patrols hotter, drier stretches than its younger kin. It scorches deadwood so new shoots can push through.' },
+  { id: 73, name: 'Phanpy',     type: ['Ground'],           region: 'Withered Wasteland', habitats: ['Wildflower Patch'],     specialty: 'Bulldoze', time: 'Day',     weather: 'Sunny',  desc: 'Trots happily through flower patches with its trunk swinging. It uproots stubborn weeds for the gardeners.' },
+  { id: 74, name: 'Rolycoly',   type: ['Rock'],             region: 'Withered Wasteland', habitats: ['Mountain Cave'],        specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'Rolls everywhere on a wheel of coal. It cracks dry rubble down into useful gravel as it goes.' },
+  { id: 75, name: 'Slugma',     type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Oozes slowly between sun-baked stones. Its trail of warm magma reheats the campfire ring overnight.' },
+  { id: 76, name: 'Litwick',    type: ['Ghost', 'Fire'],    region: 'Withered Wasteland', habitats: ['Mountain Cave'],        specialty: 'Search',   time: 'Night',   weather: 'Any',    desc: 'A small candle that floats through dark caves. Its quiet flame leads weary travelers back to the surface.' },
+  { id: 77, name: 'Scraggy',    type: ['Dark', 'Fighting'], region: 'Withered Wasteland', habitats: ['Tall Grass'],           specialty: 'Chop',     time: 'Day',     weather: 'Sunny',  desc: 'Headbutts dead branches loose all afternoon. The kindling pile beside the campfire is its handiwork.' },
+  { id: 78, name: 'Cutiefly',   type: ['Bug', 'Fairy'],     region: 'Withered Wasteland', habitats: ['Wildflower Patch'],     specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'Drifts between blooms gathering bright nectar. It scatters pollen wherever it lands, helping new flowers spread.' },
+  { id: 79, name: 'Cyndaquil',  type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Flares the flames on its back when surprised. It tends the campfire when no one else is around to stoke it.' },
+  { id: 80, name: 'Torchic',    type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring'],        specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'A downy chick that toddles after warm sand and warmer hands. Its little flame keeps tea kettles humming.' },
+  { id: 81, name: 'Chimchar',   type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Campfire Ring', 'Mountain Peak'], specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Swings from rope to rope and from rock to rock, tail-flame blazing. It loves to dance around the fire at night.' },
+  { id: 82, name: 'Tepig',      type: ['Fire'],             region: 'Withered Wasteland', habitats: ['Veggie Plot', 'Campfire Ring'], specialty: 'Burn',     time: 'Day',     weather: 'Sunny',  desc: 'Roots through dry soil sniffing out forgotten roots. It roasts them on the campfire to share with everyone.' },
+
+  // —— Rocky Ridges (added) ——
+  { id: 83, name: 'Pawniard',   type: ['Dark', 'Steel'],    region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Chop',     time: 'Day',     weather: 'Any',    desc: 'A blade-armored scout that haunts the deeper cave levels. Its precise slashes prune awkward branches in seconds.' },
+  { id: 84, name: 'Lycanroc',   type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Mountain Peak', 'Boulder Tall Grass'], specialty: 'Chop',     time: 'Day',     weather: 'Sunny',  desc: 'Patrols the upper ridges in long, loping strides. It clears unstable boulders before they can fall on travelers.' },
+  { id: 85, name: 'Tyrunt',     type: ['Rock', 'Dragon'],   region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'A pint-sized prehistoric brawler that loves a tussle. Its bite cracks ore loose from the cave walls.' },
+  { id: 86, name: 'Carbink',    type: ['Rock', 'Fairy'],    region: 'Rocky Ridges',       habitats: ['Mountain Cave', 'Hidden Laboratory'], specialty: 'Generate', time: 'Any',     weather: 'Any',    desc: 'A glittering gem-creature that hums softly in dark places. Its glow keeps cave lanterns lit without oil.' },
+  { id: 87, name: 'Cubchoo',    type: ['Ice'],              region: 'Rocky Ridges',       habitats: ['Mountain Peak'],        specialty: 'Water',    time: 'Day',     weather: 'Cloudy', desc: 'Sniffles its way across the snowy summits. Its dripping nose waters thirsty alpine flowers.' },
+  { id: 88, name: 'Croagunk',   type: ['Poison', 'Fighting'], region: 'Rocky Ridges',     habitats: ['Mountain Cave'],        specialty: 'Crush',    time: 'Night',   weather: 'Cloudy', desc: 'A quiet swamp-fighter that prefers the cave’s damp corners. It deflates puffed-up rivals with a single jab.' },
+  { id: 89, name: 'Klink',      type: ['Steel'],            region: 'Rocky Ridges',       habitats: ['Construction Site', 'Hidden Laboratory'], specialty: 'Build',    time: 'Any',     weather: 'Any',    desc: 'A pair of gears that mesh with a satisfying click. It powers small lifts and conveyor belts on busy work sites.' },
+  { id: 90, name: 'Cufant',     type: ['Steel'],            region: 'Rocky Ridges',       habitats: ['Construction Site'],    specialty: 'Bulldoze', time: 'Day',     weather: 'Any',    desc: 'A small copper elephant with a knack for heavy hauling. Its trunk doubles as a perfect winch.' },
+  { id: 91, name: 'Gible',      type: ['Dragon', 'Ground'], region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Crush',    time: 'Day',     weather: 'Sunny',  desc: 'Lurks just inside cave mouths and snaps at anything passing. It chews through stubborn rock dams with no fuss.' },
+  { id: 92, name: 'Salandit',   type: ['Poison', 'Fire'],   region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Burn',     time: 'Night',   weather: 'Any',    desc: 'Slips between cracks in the rock leaving wisps of toxic smoke. It startles cave bats into open passages.' },
+  { id: 93, name: 'Mawile',     type: ['Steel', 'Fairy'],   region: 'Rocky Ridges',       habitats: ['Mountain Cave'],        specialty: 'Recycle',  time: 'Day',     weather: 'Any',    desc: 'Hides its huge steel jaws under a sweet smile. It bites old nails and scraps into perfectly reusable forms.' },
+  { id: 94, name: 'Boldore',    type: ['Rock'],             region: 'Rocky Ridges',       habitats: ['Mountain Cave', 'Boulder Tall Grass'], specialty: 'Crush',    time: 'Any',     weather: 'Any',    desc: 'A crystalline boulder studded with bright orange shards. It cracks tunnels open with a single rolling charge.' },
+  { id: 95, name: 'Lillipup',   type: ['Normal'],           region: 'Rocky Ridges',       habitats: ['Mountain Peak', 'Garden Habitat'], specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'A scruffy little pup with a brave, alert face. It scouts switchbacks for the slow-moving Hippopotas caravans.' },
+  { id: 96, name: 'Stufful',    type: ['Normal', 'Fighting'], region: 'Rocky Ridges',     habitats: ['Tree-Shaded Tall Grass'], specialty: 'Build',    time: 'Day',     weather: 'Sunny',  desc: 'Looks cuddly and acts surly, but lifts twice its weight in lumber. It anchors heavy crossbeams without complaint.' },
+  { id: 97, name: 'Spinda',     type: ['Normal'],           region: 'Rocky Ridges',       habitats: ['Mountain Peak'],        specialty: 'Hype',     time: 'Day',     weather: 'Cloudy', desc: 'Wobbles in dizzy circles wherever it goes. Its goofy dance gets weary builders laughing again.' },
+
+  // —— Bleak Beach (added) ——
+  { id: 98,  name: 'Spheal',    type: ['Ice', 'Water'],     region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Rolls through cold tidewater grass like a furry ball. It cools the beach air on hotter afternoons.' },
+  { id: 99,  name: 'Shellos',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Day',     weather: 'Rain',   desc: 'A soft sea slug that prefers brackish puddles. It seeps fresh water steadily into tired roots.' },
+  { id: 100, name: 'Frillish',  type: ['Water', 'Ghost'],   region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Water',    time: 'Night',   weather: 'Any',    desc: 'Drifts beneath dark waves trailing pale frills. Its faint glow guides night-fishers home to shore.' },
+  { id: 101, name: 'Clamperl',  type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Gather',   time: 'Day',     weather: 'Any',    desc: 'Hides a single shining pearl in a hinged blue shell. It gifts the pearl to helpers who treat the reef kindly.' },
+  { id: 102, name: 'Tirtouga',  type: ['Water', 'Rock'],    region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'An ancient little turtle uncovered in shoreline rubble. It still knows where the old reefs sleep.' },
+  { id: 103, name: 'Piplup',    type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'A proud little penguin chick that won’t admit it’s lost. It waters seedlings whenever no one’s watching.' },
+  { id: 104, name: 'Totodile',  type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Day',     weather: 'Sunny',  desc: 'Snaps cheerfully at anything that drifts within reach. Its tail-splashes water entire rows of reeds.' },
+  { id: 105, name: 'Goldeen',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'A graceful red-and-white swimmer threading through reeds. It rinses fresh silt over tired riverbanks.' },
+  { id: 106, name: 'Remoraid',  type: ['Water'],            region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Water',    time: 'Day',     weather: 'Any',    desc: 'Fires precise jets of water at distant targets. Helpers use it like a portable garden hose.' },
+  { id: 107, name: 'Mantyke',   type: ['Water', 'Flying'],  region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'Glides above the waves trailing a smaller Remoraid. The pair ferries lightweight messages to and from the offshore dock.' },
+  { id: 108, name: 'Carvanha',  type: ['Water', 'Dark'],    region: 'Bleak Beach',        habitats: ['Ocean Tall Grass'],     specialty: 'Chop',     time: 'Night',   weather: 'Cloudy', desc: 'A toothy predator best admired from the dock. Its bite cracks driftwood into instant kindling.' },
+  { id: 109, name: 'Oshawott',  type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass', 'Waterside Dinghy'], specialty: 'Chop',     time: 'Day',     weather: 'Any',    desc: 'Wields a sea-shell scalchop like a small blade. It trims overgrown reeds for the boat crews.' },
+  { id: 110, name: 'Popplio',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Conjures bubble sculptures from its nose for fun. Its show is the highlight of every dockside picnic.' },
+  { id: 111, name: 'Froakie',   type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Day',     weather: 'Rain',   desc: 'A nimble blue frog cloaked in bubbly foam. It mists the reeds with every confident hop.' },
+  { id: 112, name: 'Quaxly',    type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Dinghy'],     specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'A dapper duckling that grooms its head feathers obsessively. It supervises every dinghy launch like a tiny captain.' },
+  { id: 113, name: 'Sobble',    type: ['Water'],            region: 'Bleak Beach',        habitats: ['Waterside Tall Grass'], specialty: 'Water',    time: 'Evening', weather: 'Rain',   desc: 'A shy chameleon-lizard that vanishes into wet reeds. Its tears nurture the rarest waterside blooms.' },
+
+  // —— Sparkling Skylands (added) ——
+  { id: 114, name: 'Cottonee',  type: ['Grass', 'Fairy'],   region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Drifts on the breeze like a sentient dandelion. It scatters seed-fluff across every floating planter.' },
+  { id: 115, name: 'Petilil',   type: ['Grass'],            region: 'Sparkling Skylands', habitats: ['Secret Garden'],        specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A tiny bulb with two cheerful leaves on its head. It hums softly to wilting flowers until they perk up.' },
+  { id: 116, name: 'Igglybuff', type: ['Normal', 'Fairy'],  region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Bounces around the cloud-meadows in fluffy pink puffs. Its giggle is rumored to make stubborn seeds sprout.' },
+  { id: 117, name: 'Jigglypuff',type: ['Normal', 'Fairy'],  region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Sings tired helpers into deep, fluffy naps. Then it pouts adorably when they doze off.' },
+  { id: 118, name: 'Magnemite', type: ['Electric', 'Steel'],region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Generate', time: 'Any',     weather: 'Any',    desc: 'Hovers patiently above the lab benches humming. It powers the smallest gadgets straight from its coils.' },
+  { id: 119, name: 'Voltorb',   type: ['Electric'],         region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Generate', time: 'Any',     weather: 'Any',    desc: 'Disguises itself among the lab’s spare batteries. Touch the wrong one and the lights flicker for a week.' },
+  { id: 120, name: 'Elgyem',    type: ['Psychic'],          region: 'Sparkling Skylands', habitats: ['Hidden Laboratory'],    specialty: 'Teleport', time: 'Night',   weather: 'Any',    desc: 'Appears at the lab during meteor showers. It teleports lost tools back from wherever they’ve drifted to.' },
+  { id: 121, name: 'Cosmog',    type: ['Psychic'],          region: 'Sparkling Skylands', habitats: ['Sky Garden', 'Secret Garden'], specialty: 'Teleport', time: 'Night',   weather: 'Any',    desc: 'A tiny ball of starlight that giggles when held. It only appears for helpers who’ve tended the gardens kindly.' },
+  { id: 122, name: 'Sigilyph',  type: ['Psychic', 'Flying'],region: 'Sparkling Skylands', habitats: ['Sky Garden'],           specialty: 'Fly',      time: 'Day',     weather: 'Sunny',  desc: 'A patterned guardian that circles the island in slow loops. It watches over fragile pots on windy days.' },
+  { id: 123, name: 'Comfey',    type: ['Fairy'],            region: 'Sparkling Skylands', habitats: ['Secret Garden'],        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Weaves itself into wreaths of fresh flowers. Anyone wearing one feels their tired feet lighten up.' },
+  { id: 124, name: 'Minccino',  type: ['Normal'],           region: 'Sparkling Skylands', habitats: ['Secret Garden', 'Pokémon Center'], specialty: 'Gather',   time: 'Day',     weather: 'Sunny',  desc: 'A tidy little chinchilla that grooms everything in sight. The Pokémon Center has never been dust-free until now.' },
+  { id: 125, name: 'Spritzee',  type: ['Fairy'],            region: 'Sparkling Skylands', habitats: ['Secret Garden'],        specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Carries a permanent cloud of sweet perfume. Helpers visit it before any garden-party celebration.' },
+
+  // —— Palette Town (added) ——
+  { id: 126, name: 'Chikorita', type: ['Grass'],            region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A leaf-headed sweetie that releases calming aroma. It waves its leaf to guide gardeners between rows.' },
+  { id: 127, name: 'Treecko',   type: ['Grass'],            region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Grow',    time: 'Day',     weather: 'Sunny',  desc: 'Clings to tree trunks with grippy toe-pads. It measures sapling growth with quiet pride each morning.' },
+  { id: 128, name: 'Turtwig',   type: ['Grass'],            region: 'Palette Town',       habitats: ['Garden Habitat', 'Veggie Plot'], specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'Wears a tiny tree as a shell. The leaf overhead tells gardeners exactly when it’s time to water.' },
+  { id: 129, name: 'Snivy',     type: ['Grass'],            region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Grow',    time: 'Day',     weather: 'Sunny',  desc: 'A graceful, smug little snake that prefers dappled shade. It coils around stalks to keep them upright.' },
+  { id: 130, name: 'Chespin',   type: ['Grass'],            region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Chop',    time: 'Day',     weather: 'Sunny',  desc: 'A spiky-headed forager that gnaws nuts with gusto. It splits firewood for the Pokémon Center stove.' },
+  { id: 131, name: 'Rowlet',    type: ['Grass', 'Flying'],  region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Fly',     time: 'Evening', weather: 'Cloudy', desc: 'A round little owl that drops silently from low branches. It carries small letters between cottages at dusk.' },
+  { id: 132, name: 'Grookey',   type: ['Grass'],            region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Hype',    time: 'Day',     weather: 'Sunny',  desc: 'Drums on hollow logs in steady upbeat rhythms. The garden seems to grow faster wherever it plays.' },
+  { id: 133, name: 'Sprigatito',type: ['Grass'],            region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Grow',     time: 'Day',     weather: 'Sunny',  desc: 'A leafy little kitten that nuzzles every visitor. Its fur smells faintly of fresh-cut herbs.' },
+  { id: 134, name: 'Hoothoot',  type: ['Normal', 'Flying'], region: 'Palette Town',       habitats: ['Tree-Shaded Tall Grass'], specialty: 'Search',  time: 'Night',   weather: 'Any',    desc: 'Stands watch on a single foot from a high branch. It hoots the hour for late-night gardeners.' },
+  { id: 135, name: 'Sentret',   type: ['Normal'],           region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Search',   time: 'Day',     weather: 'Sunny',  desc: 'Stands tall on its tail to peek over hedges. It signals helpers the moment a stray Skwovet sneaks in.' },
+  { id: 136, name: 'Plusle',    type: ['Electric'],         region: 'Palette Town',       habitats: ['Wildflower Patch'],     specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Cheers helpers on with sparkling pom-poms of static. Always seen beside its partner Minun.' },
+  { id: 137, name: 'Minun',     type: ['Electric'],         region: 'Palette Town',       habitats: ['Wildflower Patch'],     specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Trades cheers with Plusle in perfect counter-rhythm. Their twin sparks could light a small parade.' },
+  { id: 138, name: 'Yamper',    type: ['Electric'],         region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Generate', time: 'Day',     weather: 'Sunny',  desc: 'A corgi puppy that generates static from its own running. It powers small fairy lights along the path.' },
+  { id: 139, name: 'Lechonk',   type: ['Normal'],           region: 'Palette Town',       habitats: ['Veggie Plot'],          specialty: 'Gather',   time: 'Day',     weather: 'Any',    desc: 'A round little pig with an unstoppable appetite. It snuffles out overripe veggies before they spoil.' },
+  { id: 140, name: 'Skitty',    type: ['Normal'],           region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Chases its own tail in dizzy little loops. Its purr is rumored to coax shy flowers into bloom.' },
+  { id: 141, name: 'Buneary',   type: ['Normal'],           region: 'Palette Town',       habitats: ['Garden Habitat'],       specialty: 'Hype',     time: 'Day',     weather: 'Sunny',  desc: 'Hops higher than any helper expects. Its springy ears double as a soft bell rope at the gate.' },
+  { id: 142, name: 'Audino',    type: ['Normal'],           region: 'Palette Town',       habitats: ['Pokémon Center'],       specialty: 'Hype',     time: 'Any',     weather: 'Any',    desc: 'Listens to a guest’s heartbeat with floppy pink ears. It always knows exactly which berry to offer.' },
+  { id: 143, name: 'Hatenna',   type: ['Psychic'],          region: 'Palette Town',       habitats: ['Garden Habitat', 'Secret Garden'], specialty: 'Hype',     time: 'Day',     weather: 'Any',    desc: 'A timid little reader of moods. It only approaches helpers who are calm and quiet inside.' },
+  { id: 144, name: 'Morpeko',   type: ['Electric', 'Dark'], region: 'Palette Town',       habitats: ['Pokémon Center'],       specialty: 'Generate', time: 'Night',   weather: 'Any',    desc: 'Cycles between cheerful and grumpy on an empty stomach. Snack first, then ask it to power the night lamps.' },
+  { id: 145, name: 'Snorlax',   type: ['Normal'],           region: 'Palette Town',       habitats: ['Tree-Shaded Pink Tall Grass'], specialty: 'Recycle', time: 'Any',     weather: 'Any',    desc: 'Naps in the pink grass for hours at a time. Its quiet mountain of a body shelters smaller Pokémon underneath.' },
 ];
 
 const ALL_REGIONS = Object.keys(REGIONS);
@@ -421,8 +529,21 @@ function PokemonCard({ p, selected, onSelect, compact }) {
       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 8 }}>
         {p.type.map((t) => <TypeBadge key={t} t={t} />)}
       </div>
-      <div style={{ fontSize: compact ? 10.5 : 11, color: region.accent, fontWeight: 500, opacity: 0.85, lineHeight: 1.3 }}>
-        {p.habitat}
+      <div style={{ fontSize: compact ? 10.5 : 11, color: region.accent, fontWeight: 500, opacity: 0.85, lineHeight: 1.3, display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap' }}>
+        <span>{p.habitats[0]}</span>
+        {p.habitats.length > 1 && (
+          <span style={{
+            fontSize: 10,
+            padding: '1px 6px',
+            borderRadius: 999,
+            background: `${region.accent}33`,
+            color: region.accent,
+            fontWeight: 700,
+            letterSpacing: 0.3,
+          }}>
+            +{p.habitats.length - 1}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -604,7 +725,7 @@ function DetailPanel({ p, onClose, isMobile, safeArea }) {
               {p.desc}
             </div>
 
-            {/* Habitat scene banner */}
+            {/* Habitat scene banners — one per habitat */}
             <div style={{ marginBottom: 16 }}>
               <div style={{
                 fontSize: 10,
@@ -614,9 +735,13 @@ function DetailPanel({ p, onClose, isMobile, safeArea }) {
                 fontWeight: 600,
                 marginBottom: 6,
               }}>
-                Habitat
+                {p.habitats.length > 1 ? `Habitats · ${p.habitats.length}` : 'Habitat'}
               </div>
-              <HabitatScene habitat={p.habitat} accent={region.accent} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {p.habitats.map((h) => (
+                  <HabitatScene key={h} habitat={h} accent={region.accent} />
+                ))}
+              </div>
             </div>
 
             <div style={{
@@ -687,7 +812,7 @@ export default function App() {
       if (regionFilter !== 'All' && p.region !== regionFilter) return false;
       if (typeFilter !== 'All' && !p.type.includes(typeFilter)) return false;
       if (q) {
-        const hay = (p.name + ' ' + p.habitat).toLowerCase();
+        const hay = (p.name + ' ' + p.habitats.join(' ')).toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
