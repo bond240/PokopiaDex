@@ -20,6 +20,40 @@ const TYPE_COLORS = {
 
 const ALL_TYPES = Object.keys(TYPE_COLORS);
 
+/* ---------- national-dex numbers (for fetching sprite art) ---------- */
+
+const DEX = {
+  // Withered Wasteland
+  Cacnea: 331, Sandshrew: 27, Trapinch: 328, Cubone: 104, Numel: 322,
+  Hippopotas: 449, Sandile: 551, Diglett: 50, Drilbur: 529, Helioptile: 694,
+  Maractus: 556, Darumaka: 554, Vulpix: 37, Growlithe: 58,
+  // Rocky Ridges
+  Geodude: 74, Onix: 95, Aron: 304, Larvitar: 246, Roggenrola: 524,
+  Machop: 66, Mankey: 56, Zubat: 41, Nosepass: 299, Rockruff: 744,
+  Riolu: 447, Mienfoo: 619, Timburr: 532, Bonsly: 438,
+  // Bleak Beach
+  Magikarp: 129, Krabby: 98, Staryu: 120, Wingull: 278, Tentacool: 72,
+  Horsea: 116, Wailmer: 320, Corsola: 222, Mudkip: 258, Psyduck: 54,
+  Slowpoke: 79, Buizel: 418, Lapras: 131, Squirtle: 7,
+  // Sparkling Skylands
+  Pidgey: 16, Togepi: 175, Cleffa: 173, Mareep: 179, Pichu: 172,
+  Drifloon: 425, Swablu: 333, Starly: 396, Rookidee: 821, Hoppip: 187,
+  Beldum: 374, Porygon: 137, Abra: 63, Ralts: 280,
+  // Palette Town
+  Bulbasaur: 1, Oddish: 43, Bellsprout: 69, Sunkern: 191, Caterpie: 10,
+  Weedle: 13, Pikachu: 25, Eevee: 133, Chansey: 113, Snom: 872,
+  Wooloo: 831, Skwovet: 819, Bidoof: 399, Munchlax: 446,
+};
+
+/* Pokémon HOME 3D renders — closest free match to Pokopia's 3D-model style. */
+const SPRITE_BASE =
+  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home';
+
+const spriteUrl = (name) => {
+  const id = DEX[name];
+  return id ? `${SPRITE_BASE}/${id}.png` : null;
+};
+
 /* ---------- pokémon data (70 entries across 5 regions) ---------- */
 
 const POKEMON = [
@@ -183,6 +217,34 @@ function PokemonCard({ p, selected, onSelect }) {
         </span>
         <span style={{ fontSize: 12, lineHeight: 1 }} aria-label={p.region}>{region.icon}</span>
       </div>
+      <div style={{
+        position: 'relative',
+        height: 110,
+        marginBottom: 8,
+        borderRadius: 12,
+        background: `radial-gradient(ellipse at center, ${region.accent}26 0%, transparent 70%)`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <img
+          src={spriteUrl(p.name)}
+          alt={p.name}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'none',
+          }}
+        />
+      </div>
       <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 8, fontFamily: 'Outfit, system-ui, sans-serif' }}>
         {p.name}
       </div>
@@ -307,6 +369,33 @@ function DetailPanel({ p, onClose, isMobile, safeArea }) {
           </button>
 
           <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'relative',
+              height: 200,
+              marginBottom: 12,
+              borderRadius: 16,
+              background: `radial-gradient(ellipse at center, ${region.accent}33 0%, transparent 70%)`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <img
+                src={spriteUrl(p.name)}
+                alt={p.name}
+                decoding="async"
+                draggable={false}
+                onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                style={{
+                  maxWidth: '90%',
+                  maxHeight: '100%',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))',
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  WebkitTouchCallout: 'none',
+                }}
+              />
+            </div>
             <div style={{
               fontFamily: "'JetBrains Mono', ui-monospace, monospace",
               fontSize: 13,
