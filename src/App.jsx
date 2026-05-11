@@ -152,102 +152,98 @@ function FontLink() {
 }
 
 /* ---------- habitat info ----------
- * Each habitat has a 1-2 sentence description and an image filename.
- * Image files live in /public/habitats/<slug>.jpg (any extension is
- * fine — match the filename here). Drop screenshots in that folder
- * and they appear automatically. Missing files fall back to a clean
- * gradient + description with the habitat name.
+ * Habitat images are auto-resolved from the habitat name:
+ *   habitat name → slugify → /public/habitats/<slug>.jpg
  *
- * Pokopia art is © Nintendo / The Pokémon Company. Self-host
- * screenshots in /public/habitats/ rather than hot-linking external
- * sites, which routinely block hot-links and rotate URLs.
+ * To add an image for ANY habitat (even ones not listed below),
+ * just save the screenshot as <slug>.jpg in public/habitats/ and
+ * it appears automatically. No code change needed.
+ *
+ * Slug rules: lowercase, accents stripped (Pokémon → pokemon),
+ * non-alphanumerics collapsed to single dashes.
+ *
+ * Optional `image` field lets you override the auto-derived path
+ * (e.g. to use .png or .webp instead).
+ *
+ * Pokopia art is © Nintendo / The Pokémon Company — keep
+ * screenshots self-hosted under /public/habitats/.
  */
 const BASE = import.meta.env.BASE_URL || '/';
-const habitatImg = (file) => `${BASE}habitats/${file}`;
+
+const slugifyHabitat = (s) => s
+  .normalize('NFD')
+  .replace(/[̀-ͯ]/g, '')
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+const defaultHabitatImage = (habitat) => `${BASE}habitats/${slugifyHabitat(habitat)}.jpg`;
 
 const HABITAT_INFO = {
   'Tall Grass': {
-    image: habitatImg('tall-grass.jpg'),
     desc: 'A patch of four grass tiles laid side by side. Pokémon rustle the blades — wade through to coax them into the open.',
   },
   'Tree-Shaded Tall Grass': {
-    image: habitatImg('tree-shaded-tall-grass.jpg'),
     desc: 'Four patches of tall grass nestled at the base of a large tree. The cool shade draws forest-loving Pokémon like Scyther.',
   },
   'Boulder Tall Grass': {
-    image: habitatImg('boulder-tall-grass.jpg'),
     desc: 'Four patches of tall grass arranged around a single large boulder. Rock-loving Pokémon scramble across the stone.',
   },
   'Waterside Tall Grass': {
-    image: habitatImg('waterside-tall-grass.jpg'),
     desc: 'Tall grass planted along the water’s edge. The constant moisture keeps it vivid green and pulls in water-adjacent Pokémon.',
   },
   'Ocean Tall Grass': {
-    image: habitatImg('ocean-tall-grass.jpg'),
     desc: 'Tall grass sprouting where the land meets the sea. Salt-tolerant Pokémon and tide-watchers gather along the shoreline.',
   },
   'Wildflower Patch': {
-    image: habitatImg('wildflower-patch.jpg'),
     desc: 'A patch of four wildflower blooms gathered together. The bright petals draw pollinators and curious Pokémon alike.',
   },
   'Campfire Ring': {
-    image: habitatImg('campfire-ring.jpg'),
     desc: 'Three campfires arranged in a cozy ring. Fire types and wanderers gather around the warm glow after sundown.',
   },
   'Mountain Cave': {
-    image: habitatImg('mountain-cave.jpg'),
     desc: 'A dim cavern carved into the mountainside. Rock and Zubat-kin roost in the quiet, echoing depths.',
   },
   'Mountain Peak': {
-    image: habitatImg('mountain-peak.jpg'),
     desc: 'A windswept summit far above the treeline. Hardy Pokémon train against the thin, cold air.',
   },
   'Veggie Plot': {
-    image: habitatImg('veggie-plot.jpg'),
     desc: 'Tilled rows of soil studded with fresh sprouts. Pokémon graze and help tend the rows in turn.',
   },
   'Garden Habitat': {
-    image: habitatImg('garden-habitat.jpg'),
     desc: 'A tidy garden of trimmed hedges and beds of flowers. Friendly Pokémon love the calm, well-kept space.',
   },
   'Sky Garden': {
-    image: habitatImg('sky-garden.jpg'),
     desc: 'A floating garden built atop a Cloud Island. Rare Pokémon found nowhere else drift between its planters.',
   },
   'Construction Site': {
-    image: habitatImg('construction-site.jpg'),
     desc: 'A bustling work site cluttered with scaffolding and beams. Strong, helpful Pokémon pitch in with the heavy lifting.',
   },
   'Waterside Dinghy': {
-    image: habitatImg('waterside-dinghy.jpg'),
     desc: 'A small wooden boat moored at the shoreline. Aquatic Pokémon dart around the hull and through the ropes.',
   },
   'Tree-Shaded Pink Tall Grass': {
-    image: habitatImg('tree-shaded-pink-tall-grass.jpg'),
     desc: 'A leafy tree shading patches of pink tall grass. The soft pink blades draw cheerful, sweet-natured Pokémon.',
   },
   'Hydrated Pink Tall Grass': {
-    image: habitatImg('hydrated-pink-tall-grass.jpg'),
     desc: 'Pink tall grass kept lush by a steady source of water nearby. Pokémon cool off in the dewy blades.',
   },
   'Hidden Laboratory': {
-    image: habitatImg('hidden-laboratory.jpg'),
     desc: 'A discreet research lab tucked away from view. Psychic, Steel, and tech-minded Pokémon gather around its humming equipment.',
   },
   'Secret Garden': {
-    image: habitatImg('secret-garden.jpg'),
     desc: 'A hidden garden behind a flowered arch. The rarest, most timid Pokémon find sanctuary among the petals.',
   },
   'Pokémon Center': {
-    image: habitatImg('pokemon-center.jpg'),
     desc: 'A red-roofed building with a healing counter glowing at all hours. Helpers and friendly Pokémon mingle inside.',
   },
 };
 
 function HabitatScene({ habitat, accent }) {
-  const info = HABITAT_INFO[habitat];
+  const info = HABITAT_INFO[habitat] || {};
+  const imageSrc = info.image || defaultHabitatImage(habitat);
   const [failed, setFailed] = useState(false);
-  const showImage = info && info.image && !failed;
+  const showImage = imageSrc && !failed;
 
   return (
     <div>
@@ -263,7 +259,7 @@ function HabitatScene({ habitat, accent }) {
       }}>
         {showImage ? (
           <img
-            src={info.image}
+            src={imageSrc}
             alt={`${habitat} habitat screenshot`}
             loading="lazy"
             decoding="async"
@@ -311,7 +307,7 @@ function HabitatScene({ habitat, accent }) {
           {habitat}
         </div>
       </div>
-      {info && info.desc && (
+      {info.desc && (
         <div style={{
           marginTop: 10,
           fontSize: 13,
